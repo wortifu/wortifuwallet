@@ -3,998 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WortifuWallet - Modern Cash Manager</title>
+    <title>Treasure Ledger - RPG Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --success: #10b981;
-            --danger: #ef4444;
-            --dark: #0f172a;
-            --light: #f8fafc;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: var(--light);
-            min-height: 100vh;
-            overflow-x: hidden;
-            font-size: 14px;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1rem 4%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .saldo {
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            opacity: 0.9;
-        }
-
-        .saldo-value {
-            color: var(--success);
-            font-weight: 600;
-            margin-left: 0.3rem;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 7rem 4% 2rem;
-        }
-
-        .form-section {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-header {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .toggle-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 180px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            padding: 5px;
-        }
-
-        .toggle-option {
-            flex: 1;
-            text-align: center;
-            font-weight: 600;
-            z-index: 2;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-            font-size: 0.85rem;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            width: 85px;
-            height: 35px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50px;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        .toggle-switch.outcome .toggle-slider {
-            transform: translateX(85px);
-            background: linear-gradient(135deg, var(--danger), #dc2626);
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.4rem;
-            font-weight: 500;
-            opacity: 0.9;
-            font-size: 0.85rem;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 0.7rem 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: var(--light);
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-        }
-
-        .summary-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .summary-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            padding: 1.2rem;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .summary-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .summary-card.income {
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        .summary-card.outcome {
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-
-        .summary-card h3 {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-        }
-
-        .summary-card .value {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .income .value {
-            color: var(--success);
-        }
-
-        .outcome .value {
-            color: var(--danger);
-        }
-
-        .log-section {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-            padding: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .log-header {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .export-btn {
-            padding: 0.4rem 0.8rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            color: var(--light);
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .export-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .log-list {
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 0.5rem;
-        }
-
-        .log-item {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 0.8rem;
-            margin-bottom: 0.6rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition);
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .log-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateX(3px);
-        }
-
-        .log-item.income {
-            border-left: 3px solid var(--success);
-        }
-
-        .log-item.outcome {
-            border-left: 3px solid var(--danger);
-        }
-
-        .log-info {
-            flex: 1;
-        }
-
-        .log-description {
-            font-weight: 500;
-            margin-bottom: 0.2rem;
-            font-size: 0.9rem;
-        }
-
-        .log-date {
-            font-size: 0.75rem;
-            opacity: 0.6;
-        }
-
-        .log-amount {
-            font-size: 1rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .log-amount.income {
-            color: var(--success);
-        }
-
-        .log-amount.outcome {
-            color: var(--danger);
-        }
-
-        .delete-btn {
-            background: rgba(239, 68, 68, 0.2);
-            border: none;
-            color: var(--danger);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
-            margin-left: 0.8rem;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .delete-btn:hover {
-            background: rgba(239, 68, 68, 0.4);
-            transform: scale(1.1);
-        }
-
-        .chart-section {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-            padding: 1.2rem;
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-        }
-
-        .chart-title {
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .chart-period {
-            display: flex;
-            gap: 0.4rem;
-        }
-
-        .period-btn {
-            padding: 0.4rem 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            color: var(--light);
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .period-btn.active {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .period-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .chart-container {
-            height: 200px;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            padding: 1rem 0;
-        }
-
-        .chart-bar {
-            width: 30px;
-            background: linear-gradient(to top, var(--primary), var(--secondary));
-            border-radius: 4px 4px 0 0;
-            position: relative;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .chart-bar:hover {
-            transform: scaleY(1.05);
-            filter: brightness(1.2);
-        }
-
-        .chart-bar.outcome {
-            background: linear-gradient(to top, var(--danger), #dc2626);
-        }
-
-        .chart-label {
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            opacity: 0.7;
-        }
-
-        .chart-value {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            font-weight: 600;
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .chart-bar:hover .chart-value {
-            opacity: 1;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                font-size: 13px;
-            }
-            
-            .logo {
-                font-size: 1.3rem;
-            }
-            
-            .saldo {
-                font-size: 0.85rem;
-            }
-            
-            .form-header {
-                font-size: 1.1rem;
-            }
-            
-            .toggle-switch {
-                width: 160px;
-                height: 40px;
-            }
-            
-            .toggle-slider {
-                width: 75px;
-                height: 30px;
-            }
-            
-            .toggle-switch.outcome .toggle-slider {
-                transform: translateX(75px);
-            }
-            
-            .summary-card .value {
-                font-size: 1.1rem;
-            }
-            
-            .chart-container {
-                height: 150px;
-            }
-            
-            .chart-bar {
-                width: 25px;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-wallet"></i>
-                WortifuWallet
-            </div>
-            <div class="saldo">
-                <i class="fas fa-money-bill-wave"></i>
-                Saldo: <span class="saldo-value" id="saldo">Rp 0</span>
-            </div>
-        </div>
-    </header>
-
     <div class="container">
-        <section class="form-section">
-            <h2 class="form-header">
-                <i class="fas fa-plus-circle"></i>
-                Add Transaction
-            </h2>
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-coins"></i>
+                Treasure Ledger
+            </div>
+        </header>
+        
+        <!-- Balance Section - Now Player Profile -->
+        <section class="balance-section">
+            <div class="help-btn" id="helpBtn" title="Currency Conversion Help">
+                <i class="fas fa-question"></i>
+            </div>
             
-            <div class="toggle-container">
-                <div class="toggle-switch" id="typeToggle">
-                    <div class="toggle-option" data-type="income">
-                        <i class="fas fa-arrow-up"></i>
-                        Income
+            <div class="player-profile">
+                <div class="player-avatar">
+                    <img src="avatar.jpg" alt="Player Avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                </div>
+                <div class="player-info">
+                    <div class="player-name">Wortifu</div>
+                    <div class="player-role"><i class="fa-solid fa-fan"></i> Worthy Assassins</div>
+                    <div class="player-guild"><i class="fa-brands fa-guilded"></i> JokoBingung Squad</div>
+                </div>
+            </div>
+            
+            <div class="player-stats">
+                <div class="stat-row">
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <i class="fas fa-heart"></i> Health
+                        </div>
+                        <div class="stat-value" id="playerHealth">0/1000</div>
+                        <div class="health-bar">
+                            <div class="health-fill" id="healthBar"></div>
+                        </div>
                     </div>
-                    <div class="toggle-option" data-type="outcome">
-                        <i class="fas fa-arrow-down"></i>
-                        Outcome
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <i class="fas fa-magic"></i> Mana
+                        </div>
+                        <div class="stat-value" id="playerMana">0/100</div>
+                        <div class="mana-bar">
+                            <div class="mana-fill" id="manaBar"></div>
+                        </div>
                     </div>
-                    <div class="toggle-slider"></div>
+                </div>
+                
+                <div class="stat-row">
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <i class="fas fa-shield-alt"></i> Armor
+                        </div>
+                        <div class="stat-value" id="playerArmor">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <i class="fas fa-hat-wizard"></i> Spell
+                        </div>
+                        <div class="stat-value" id="playerSpell">None</div>
+                    </div>
+                </div>
+                
+                <div class="stat-row">
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <i class="fas fa-trophy"></i> Global rank
+                        </div>
+                        <div class="stat-value" id="playerRank">0/9442</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <i class="fas fa-coins"></i> Current gold
+                        </div>
+                        <div class="stat-value" id="currentBalance">0 Gold</div>
+                    </div>
                 </div>
             </div>
-
-            <form id="transactionForm">
-                <div class="form-group">
-                    <label for="amount">
-                        <i class="fas fa-coins"></i>
-                        Amount
-                    </label>
-                    <input type="number" id="amount" placeholder="Enter amount" required step="0.01">
+            
+            <div class="treasury-stats">
+                <div class="treasury-item">
+                    <div class="treasury-label">
+                        <i class="fas fa-gem"></i> Loot Gain
+                    </div>
+                    <div class="treasury-value income-value" id="totalIncome">0 Gold</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="description">
-                        <i class="fas fa-file-alt"></i>
-                        Description
-                    </label>
-                    <textarea id="description" placeholder="Enter description" required></textarea>
+                <div class="treasury-item expenses">
+                    <div class="treasury-label">
+                        <i class="fas fa-skull-crossbones"></i> Lost
+                    </div>
+                    <div class="treasury-value expense-value" id="totalExpenses">0 Gold</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="date">
-                        <i class="fas fa-calendar-alt"></i>
-                        Date
-                    </label>
-                    <input type="date" id="date" required>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-plus"></i>
-                    Add Transaction
-                </button>
-            </form>
-        </section>
-
-        <div class="summary-cards">
-            <div class="summary-card income">
-                <h3>
-                    <i class="fas fa-arrow-up"></i>
-                    Total Income
-                </h3>
-                <div class="value" id="totalIncome">Rp 0</div>
-            </div>
-            <div class="summary-card outcome">
-                <h3>
-                    <i class="fas fa-arrow-down"></i>
-                    Total Outcome
-                </h3>
-                <div class="value" id="totalOutcome">Rp 0</div>
-            </div>
-        </div>
-
-        <section class="log-section">
-            <div class="log-header">
-                <h3>
-                    <i class="fas fa-list"></i>
-                    Transaction Log
-                </h3>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span id="logCount">0 transactions</span>
-                    <button class="export-btn" onclick="exportToCSV()">
-                        <i class="fas fa-download"></i>
-                        Export CSV
-                    </button>
-                </div>
-            </div>
-            <div class="log-list" id="logList">
-                <!-- Transactions will be added here -->
             </div>
         </section>
-
+    
+        <!-- Quote Section -->
+        <section class="quote-section">
+            <div class="quote-text" id="quoteText">"Loading wisdom..."</div>
+            <button class="refresh-quote-btn" id="refreshQuoteBtn">
+                <i class="fas fa-sync-alt"></i> New Wisdom
+            </button>
+        </section>
+        
+        
+        <!-- Chart Section -->
         <section class="chart-section">
             <div class="chart-header">
-                <h3 class="chart-title">
+                <div class="chart-title">
                     <i class="fas fa-chart-bar"></i>
-                    Transaction Chart
-                </h3>
-                <div class="chart-period">
-                    <button class="period-btn active" data-period="day">
-                        <i class="fas fa-sun"></i>
-                        Day
+                    Treasury Map
+                </div>
+                <div class="chart-dropdown">
+                    <button class="chart-dropdown-btn" id="chartDropdownBtn">
+                        <span id="currentChartPeriod">Today</span>
+                        <i class="fas fa-chevron-down"></i>
                     </button>
-                    <button class="period-btn" data-period="month">
-                        <i class="fas fa-calendar"></i>
-                        Month
-                    </button>
-                    <button class="period-btn" data-period="year">
-                        <i class="fas fa-calendar-alt"></i>
-                        Year
-                    </button>
+                    <div class="chart-dropdown-menu" id="chartDropdownMenu">
+                        <div class="chart-dropdown-option active" data-period="today">
+                            <i class="fas fa-sun"></i> Today
+                        </div>
+                        <div class="chart-dropdown-option" data-period="week">
+                            <i class="fas fa-calendar-week"></i> Week
+                        </div>
+                        <div class="chart-dropdown-option" data-period="month">
+                            <i class="fas fa-calendar-alt"></i> Month
+                        </div>
+                        <div class="chart-dropdown-option" data-period="year">
+                            <i class="fas fa-calendar"></i> Year
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="chart-container" id="chartContainer">
-                <!-- Chart bars will be added here -->
+            <div class="chart-container">
+                <canvas id="spendingChart"></canvas>
+            </div>
+        </section>
+        
+        <!-- Transaction Section -->
+        <section class="transaction-section">
+            <div class="transaction-header">
+                <div class="transaction-title">
+                    <i class="fas fa-list"></i>
+                    Quest Log
+                </div>
+                <div class="transaction-actions">
+                    <button class="action-btn" id="importBtn">
+                        <i class="fas fa-file-import"></i> Import
+                    </button>
+                    <button class="action-btn" id="exportBtn">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
+                    <button class="action-btn" id="clearBtn">
+                        <i class="fas fa-trash-alt"></i> Clear All
+                    </button>
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" id="filterBtn">
+                            Filter <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="filter-menu" id="filterMenu">
+                            <div class="filter-option active" data-filter="today">
+                                <i class="fas fa-calendar-day"></i> Today
+                            </div>
+                            <div class="filter-option" data-filter="week">
+                                <i class="fas fa-calendar-week"></i> Week
+                            </div>
+                            <div class="filter-option" data-filter="month">
+                                <i class="fas fa-calendar-alt"></i> Month
+                            </div>
+                            <div class="filter-option" data-filter="year">
+                                <i class="fas fa-calendar"></i> Year
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="transaction-list" id="transactionList">
+                <!-- Transactions will be added here dynamically -->
             </div>
         </section>
     </div>
-
-    <script>
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        let currentType = 'income';
-        let currentPeriod = 'day';
-
-        const typeToggle = document.getElementById('typeToggle');
-        const transactionForm = document.getElementById('transactionForm');
-        const saldoElement = document.getElementById('saldo');
-        const totalIncomeElement = document.getElementById('totalIncome');
-        const totalOutcomeElement = document.getElementById('totalOutcome');
-        const logList = document.getElementById('logList');
-        const logCount = document.getElementById('logCount');
-        const chartContainer = document.getElementById('chartContainer');
-        const periodButtons = document.querySelectorAll('.period-btn');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('date').valueAsDate = new Date();
-            updateSummary();
-            renderLog();
-            renderChart();
-        });
-
-        typeToggle.addEventListener('click', (e) => {
-            if (e.target.classList.contains('toggle-option') || e.target.parentElement.classList.contains('toggle-option')) {
-                const option = e.target.classList.contains('toggle-option') ? e.target : e.target.parentElement;
-                const type = option.dataset.type;
-                currentType = type;
-                
-                if (type === 'outcome') {
-                    typeToggle.classList.add('outcome');
-                } else {
-                    typeToggle.classList.remove('outcome');
-                }
-            }
-        });
-
-        transactionForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const amount = parseFloat(document.getElementById('amount').value);
-            const description = document.getElementById('description').value;
-            const date = document.getElementById('date').value;
-            
-            const transaction = {
-                id: Date.now().toString(),
-                type: currentType,
-                amount: amount,
-                description: description,
-                date: date
-            };
-            
-            transactions.unshift(transaction);
-            saveTransactions();
-            
-            transactionForm.reset();
-            document.getElementById('date').valueAsDate = new Date();
-            typeToggle.classList.remove('outcome');
-            currentType = 'income';
-            
-            updateSummary();
-            renderLog();
-            renderChart();
-            
-            showNotification('Transaction added successfully!');
-        });
-
-        periodButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                periodButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentPeriod = btn.dataset.period;
-                renderChart();
-            });
-        });
-
-        function updateSummary() {
-            const income = transactions
-                .filter(t => t.type === 'income')
-                .reduce((sum, t) => sum + t.amount, 0);
-            
-            const outcome = transactions
-                .filter(t => t.type === 'outcome')
-                .reduce((sum, t) => sum + t.amount, 0);
-            
-            const saldo = income - outcome;
-            
-            saldoElement.textContent = `Rp ${saldo.toLocaleString('id-ID')}`;
-            totalIncomeElement.textContent = `Rp ${income.toLocaleString('id-ID')}`;
-            totalOutcomeElement.textContent = `Rp ${outcome.toLocaleString('id-ID')}`;
-        }
-
-        function renderLog() {
-            logList.innerHTML = '';
-            logCount.textContent = `${transactions.length} transactions`;
-            
-            if (transactions.length === 0) {
-                logList.innerHTML = '<p style="text-align: center; opacity: 0.6;">No transactions yet</p>';
-                return;
-            }
-            
-            transactions.forEach(transaction => {
-                const logItem = document.createElement('div');
-                logItem.className = `log-item ${transaction.type}`;
-                
-                logItem.innerHTML = `
-                    <div class="log-info">
-                        <div class="log-description">${transaction.description}</div>
-                        <div class="log-date">${formatDate(transaction.date)}</div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <a href="t.me/wortifu">wortifuapps</a>
+        <div class="footer-copyright">© 2025 | RPG Edition</div>
+    </footer>
+    
+    <!-- FAB Button -->
+    <button class="fab" id="fabBtn">
+        ⚔️
+    </button>
+    
+    <!-- Welcome Modal -->
+    <div class="modal" id="welcomeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-dice-d20"></i> Welcome, Adventurer!
+                </div>
+                <button class="close-btn" id="closeWelcomeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="welcome-content">
+                <div class="welcome-avatar">
+                    <img src="avatar.jpg" alt="Player Avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                </div>
+                <div class="welcome-message" id="welcomeMessage">
+                    <!-- Random greeting will be inserted here -->
+                </div>
+                <button class="submit-btn income-btn" id="startQuestBtn">
+                    <i class="fas fa-play"></i> Begin Your Quest
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Transaction Modal -->
+    <div class="modal" id="transactionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">
+                    <i class="fas fa-plus-circle"></i> New Quest
+                </div>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="transactionForm">
+                <div class="toggle-container">
+                    <div class="toggle-option active" data-type="income">
+                        <i class="fas fa-gem"></i> Income
                     </div>
-                    <div class="log-amount ${transaction.type}">
-                        <i class="fas fa-arrow-${transaction.type === 'income' ? 'up' : 'down'}"></i>
-                        ${transaction.type === 'income' ? '+' : '-'}Rp ${transaction.amount.toLocaleString('id-ID')}
+                    <div class="toggle-option" data-type="expense">
+                        <i class="fas fa-skull-crossbones"></i> Expense
                     </div>
-                    <button class="delete-btn" onclick="deleteTransaction('${transaction.id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="amount">
+                        <i class="fas fa-coins"></i> Gold Amount
+                    </label>
+                    <input type="number" class="form-input" id="amount" placeholder="0" step="1" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="description">
+                        <i class="fas fa-edit"></i> Quest Name
+                    </label>
+                    <input type="text" class="form-input" id="description" placeholder="What's this quest for?" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="datetime">
+                        <i class="fas fa-calendar-alt"></i> Date & Time
+                    </label>
+                    <input type="datetime-local" class="form-input" id="datetime" required>
+                </div>
+                <button type="submit" class="submit-btn income-btn" id="submitBtn">
+                    <i class="fas fa-save"></i> Complete Quest
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Import Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-file-import"></i> Import Quests
+                </div>
+                <button class="close-btn" id="closeImportModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-file-csv"></i> Select CSV File
+                </label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="csvFileInput" class="file-input" accept=".csv">
+                    <label for="csvFileInput" class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt"></i> Choose CSV file or drag it here
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-info-circle"></i> CSV Format
+                </label>
+                <div style="font-size: 12px; color: var(--text-secondary); background-color: var(--bg-light); padding: 10px; border-radius: 0; border: 1px dashed var(--border-color);">
+                    The CSV file should have the following columns:<br>
+                    <strong>Date, Type, Amount, Description</strong><br>
+                    Example: <code>10/09/2025 23:41:16,IN,157000,networth pertama</code><br>
+                    Supported date formats: DD/MM/YYYY HH:MM:SS, YYYY-MM-DDTHH:MM:SS<br>
+                    Supported types: IN (income), OUT (expense), income, expense
+                </div>
+            </div>
+            <button type="button" class="submit-btn income-btn" id="importSubmitBtn">
+                <i class="fas fa-file-import"></i> Import Quests
+            </button>
+        </div>
+    </div>
+    
+    <!-- Help Modal -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-question-circle"></i> Currency Conversion
+                </div>
+                <button class="close-btn" id="closeHelpModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div style="font-size: 14px; color: var(--text-primary); font-family: 'VT323', monospace;">
+                <p style="margin-bottom: 15px;">In Treasure Ledger, your balance is displayed in Gold (G) and Platinum (P) coins.</p>
                 
-                logList.appendChild(logItem);
-            });
-        }
-
-        function renderChart() {
-            chartContainer.innerHTML = '';
-            
-            if (transactions.length === 0) {
-                chartContainer.innerHTML = '<p style="text-align: center; opacity: 0.6;">No data to display</p>';
-                return;
-            }
-            
-            const chartData = getChartData();
-            const maxValue = Math.max(...chartData.map(d => d.total));
-            
-            chartData.forEach(data => {
-                const barContainer = document.createElement('div');
-                barContainer.style.position = 'relative';
-                barContainer.style.flex = '1';
-                barContainer.style.display = 'flex';
-                barContainer.style.flexDirection = 'column';
-                barContainer.style.alignItems = 'center';
+                <div style="background-color: var(--bg-light); padding: 10px; border-radius: 0; border: 1px dashed var(--border-color); margin-bottom: 15px;">
+                    <strong>Currency Conversion:</strong><br>
+                    1 Platinum (P) = 10,000 Gold (G)<br>
+                    1 Gold (G) = 1 Indonesian Rupiah (IDR)
+                </div>
                 
-                const bar = document.createElement('div');
-                bar.className = `chart-bar ${data.type}`;
-                bar.style.height = `${(data.total / maxValue) * 150}px`;
+                <p style="margin-bottom: 15px;">To convert your balance to IDR:</p>
                 
-                const label = document.createElement('div');
-                label.className = 'chart-label';
-                label.textContent = data.label;
+                <div style="background-color: var(--bg-light); padding: 10px; border-radius: 0; border: 1px dashed var(--border-color); margin-bottom: 15px;">
+                    <strong>Example:</strong><br>
+                    If your balance is 2P 5,000G:<br>
+                    = (2 × 10,000) + 5,000<br>
+                    = 25,000 Gold<br>
+                    = 25,000 IDR
+                </div>
                 
-                const value = document.createElement('div');
-                value.className = 'chart-value';
-                value.textContent = `Rp ${data.total.toLocaleString('id-ID')}`;
-                
-                bar.appendChild(value);
-                barContainer.appendChild(bar);
-                barContainer.appendChild(label);
-                chartContainer.appendChild(barContainer);
-            });
-        }
-
-        function getChartData() {
-            const now = new Date();
-            let data = [];
-            
-            if (currentPeriod === 'day') {
-                for (let i = 11; i >= 0; i--) {
-                    const hour = new Date(now);
-                    hour.setHours(hour.getHours() - i);
-                    
-                    const hourTransactions = transactions.filter(t => {
-                        const tDate = new Date(t.date);
-                        return tDate.getHours() === hour.getHours() && 
-                               tDate.toDateString() === hour.toDateString();
-                    });
-                    
-                    const total = hourTransactions.reduce((sum, t) => sum + t.amount, 0);
-                    const type = hourTransactions.some(t => t.type === 'outcome') ? 'outcome' : 'income';
-                    
-                    data.push({
-                        label: `${hour.getHours()}:00`,
-                        total: total,
-                        type: type
-                    });
-                }
-            } else if (currentPeriod === 'month') {
-                for (let i = 6; i >= 0; i--) {
-                    const day = new Date(now);
-                    day.setDate(day.getDate() - i);
-                    
-                    const dayTransactions = transactions.filter(t => {
-                        const tDate = new Date(t.date);
-                        return tDate.toDateString() === day.toDateString();
-                    });
-                    
-                    const total = dayTransactions.reduce((sum, t) => sum + t.amount, 0);
-                    const type = dayTransactions.some(t => t.type === 'outcome') ? 'outcome' : 'income';
-                    
-                    data.push({
-                        label: day.getDate(),
-                        total: total,
-                        type: type
-                    });
-                }
-            } else {
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                
-                for (let i = 5; i >= 0; i--) {
-                    const month = new Date(now);
-                    month.setMonth(month.getMonth() - i);
-                    
-                    const monthTransactions = transactions.filter(t => {
-                        const tDate = new Date(t.date);
-                        return tDate.getMonth() === month.getMonth() && 
-                               tDate.getFullYear() === month.getFullYear();
-                    });
-                    
-                    const total = monthTransactions.reduce((sum, t) => sum + t.amount, 0);
-                    const type = monthTransactions.some(t => t.type === 'outcome') ? 'outcome' : 'income';
-                    
-                    data.push({
-                        label: months[month.getMonth()],
-                        total: total,
-                        type: type
-                    });
-                }
-            }
-            
-            return data.filter(d => d.total > 0);
-        }
-
-        function deleteTransaction(id) {
-            transactions = transactions.filter(t => t.id !== id);
-            saveTransactions();
-            updateSummary();
-            renderLog();
-            renderChart();
-            showNotification('Transaction deleted');
-        }
-
-        function saveTransactions() {
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('id-ID', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, var(--primary), var(--secondary));
-                color: white;
-                padding: 0.8rem 1.2rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-                z-index: 2000;
-                animation: slideIn 0.3s ease-out;
-                font-size: 0.9rem;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            `;
-            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'fadeOut 0.3s ease-out';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        function exportToCSV() {
-            if (transactions.length === 0) {
-                showNotification('No transactions to export');
-                return;
-            }
-
-            let csv = 'ID,Type,Amount,Description,Date\n';
-            
-            transactions.forEach(transaction => {
-                const escapedDescription = `"${transaction.description.replace(/"/g, '""')}"`;
-                csv += `${transaction.id},${transaction.type},${transaction.amount},${escapedDescription},${transaction.date}\n`;
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            
-            const now = new Date();
-            const fileName = `wortifuwallet_transactions_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}.csv`;
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', fileName);
-            link.style.visibility = 'hidden';
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            showNotification('Transactions exported successfully!');
-        }
-    </script>
+                <p>This conversion rate helps you understand the real-world value of your in-game currency!</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-content">
+            <div class="confirm-title" id="confirmTitle">
+                <i class="fas fa-exclamation-triangle"></i> Confirm Action
+            </div>
+            <div class="confirm-message" id="confirmMessage">Are you sure you want to proceed?</div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-no" id="confirmNo">
+                    <i class="fas fa-times"></i> No
+                </button>
+                <button class="confirm-btn confirm-yes" id="confirmYes">
+                    <i class="fas fa-check"></i> Yes
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Quest completed successfully!</span>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="quotes.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
