@@ -1,2 +1,2 @@
-# wortifuwallet
-Aplikasi dompet masakini ( cash management )
+ # wortifuwallet
+Aplikasi dompet masakini ( cash management rpg edition )
